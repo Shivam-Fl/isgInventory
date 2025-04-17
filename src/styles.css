@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      background-color: #f8f9fa;
+      overflow-y: auto;
+    }
+  }
+
+  ::ng-deep .toast-container {
+    z-index: 9999;
+  }

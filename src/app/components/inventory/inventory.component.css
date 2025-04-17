@@ -1,0 +1,523 @@
+/* General Styles */
+.inventory-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+/* Loading Indicator */
+.loading-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #555;
+  font-size: 16px;
+}
+
+.spinner-icon {
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-path {
+  stroke: #3b82f6;
+  stroke-width: 4;
+  opacity: 0.25;
+}
+
+.spinner-head {
+  fill: #3b82f6;
+  opacity: 0.75;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background-color: #fff;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.tabs a {
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  background-color: #e5e7eb;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tabs a.active {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+.tabs a:hover:not(.active) {
+  background-color: #d1d5db;
+}
+
+/* Search and Add */
+.search-add {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.search-bar {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.search-bar:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.add-btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-btn:hover {
+  background-color: #2563eb;
+}
+
+.add-btn:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* Error Message */
+.error-message {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.error-message p {
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.retry-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #b91c1c;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retry-btn:hover {
+  background-color: #991b1b;
+}
+
+/* Low Stock Alert */
+.low-stock-alert {
+  background-color: #fee2e2;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.low-stock-alert h3 {
+  color: #b91c1c;
+}
+
+.low-stock-alert ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.low-stock-alert li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: #b91c1c;
+  margin-bottom: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #b91c1c;
+  border-radius: 50%;
+}
+
+/* Inventory Section */
+.inventory-section {
+  margin-bottom: 32px;
+}
+
+.table-container {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+thead {
+  background-color: #f3f4f6;
+}
+
+th {
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  text-align: left;
+}
+
+tr {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+td {
+  padding: 12px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+td .material-icons {
+  vertical-align: middle;
+  margin-right: 8px;
+  color: #3b82f6;
+}
+
+.low-stock {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #3b82f6;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: color 0.2s ease;
+}
+
+.action-btn:hover {
+  color: #2563eb;
+}
+
+.action-btn:disabled {
+  color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.no-items {
+  text-align: center;
+  color: #6b7280;
+  padding: 24px;
+  font-size: 16px;
+}
+
+/* Chart Section */
+.chart-section {
+  margin-top: 32px;
+}
+
+.chart-container {
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 300px;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 24px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close:hover {
+  color: #1a1a1a;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.toggle-container {
+  margin-bottom: 12px;
+}
+
+.toggle-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #4b5563;
+  background-color: #e5e7eb;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-btn:hover {
+  background-color: #d1d5db;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tabs a {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .search-add {
+    flex-direction: column;
+  }
+
+  .add-btn {
+    width: 100%;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .hide-mobile {
+    display: none;
+  }
+
+  .hide-mobile-sm {
+    display: none;
+  }
+
+  .chart-container {
+    height: 250px;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 24px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  .tabs a {
+    font-size: 12px;
+  }
+
+  .search-bar,
+  .add-btn {
+    font-size: 14px;
+  }
+
+  th, td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .chart-container {
+    height: 200px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .form-group label {
+    font-size: 12px;
+  }
+}
+
+/* Add to your component's CSS */
+.update-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.update-btn:hover {
+  background-color: #45a049;
+}
+
+.update-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.view-more {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.view-more-link {
+  color: #6b48ff;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 14px;
+}
+
+.view-more-link:hover {
+  color: #4a32cc;
+}

@@ -1,0 +1,263 @@
+<div class="inventory-container">
+  <h2>Inventory Management</h2>
+
+  <!-- Loading indicator -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="loading-spinner">
+      <svg class="spinner-icon" viewBox="0 0 24 24">
+        <circle class="spinner-path" cx="12" cy="12" r="10"></circle>
+        <path class="spinner-head" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+      </svg>
+      Loading inventory data...
+    </div>
+  </div>
+
+  <!-- Dynamic tabs -->
+  <div class="tabs" role="tablist">
+    <a [class.active]="activeTab === 'all'" (click)="setActiveTab('all')" role="tab" [attr.aria-selected]="activeTab === 'all'">All Items</a>
+    <ng-container *ngFor="let group of categoryGroups">
+      <a [class.active]="activeTab === getCategorySafeId(group.category)" (click)="setActiveTab(getCategorySafeId(group.category))" role="tab" [attr.aria-selected]="activeTab === getCategorySafeId(group.category)">{{ group.category.categoryName }}</a>
+    </ng-container>
+    <a [class.active]="activeTab === 'low-stock'" (click)="setActiveTab('low-stock')" role="tab" [attr.aria-selected]="activeTab === 'low-stock'">Low Stock</a>
+  </div>
+
+  <!-- Search and Add -->
+  <div class="search-add">
+    <input type="text" placeholder="Search inventory..." class="search-bar" [(ngModel)]="searchQuery" aria-label="Search inventory" />
+    <button class="add-btn" (click)="openAddItemModal()">Add Item</button>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="!isLoading && products.length === 0" class="error-message">
+    <p>No inventory data available. Please check your API connection.</p>
+    <button (click)="fetchInitialData()" class="retry-btn">Retry</button>
+  </div>
+
+  <!-- Low Stock Alert -->
+  <div class="low-stock-alert" *ngIf="!isLoading && lowStockItems.length > 0">
+    <h3>Low Stock Alert</h3>
+    <ul>
+      <li *ngFor="let item of lowStockItems">
+        <span class="dot"></span> {{ item.productName }} - {{ item.quantityInStock }} remaining - Reorder soon
+      </li>
+    </ul>
+  </div>
+
+  <!-- Dynamic Category Sections -->
+  <ng-container *ngIf="!isLoading">
+    <!-- All Categories -->
+
+<ng-container *ngIf="activeTab === 'all'">
+  <div class="inventory-section" *ngFor="let group of categoryGroups">
+    <h3>{{ group.category.categoryName }}</h3>
+    <div class="table-container">
+      <table *ngIf="getFilteredProductsForCategory(group).length > 0; else noCategoryItems">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th class="hide-mobile">Description</th>
+            <th>Quantity</th>
+            <th class="hide-mobile-sm">Price</th>
+            <th class="hide-mobile">Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of getFilteredProductsForCategory(group)">
+            <td>
+              <i class="material-icons">{{ getCategoryIcon(group.category.categoryName) }}</i> {{ item.productName }}
+            </td>
+            <td class="hide-mobile">{{ item.productDescription }}</td>
+            <td>{{ item.quantityInStock }}</td>
+            <td class="hide-mobile-sm">${{ item.unitPrice.toFixed(2) }}</td>
+            <td class="hide-mobile" [ngClass]="{'low-stock': item.quantityInStock <= item.reorderLevel}">
+              {{ item.quantityInStock > 0 ? (item.quantityInStock <= item.reorderLevel ? 'Low Stock' : 'In Stock') : 'Out of Stock' }}
+            </td>
+            <td>
+              <button class="action-btn" (click)="openUpdateStockModal(item)" aria-label="Update stock">📦</button>
+              <button class="action-btn" (click)="deleteProduct(item)" aria-label="Delete item">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Show "View More" link if there are more than 3 products in the category -->
+    <div *ngIf="group.products.length > 3" class="view-more">
+      <a (click)="setActiveTab(getCategorySafeId(group.category))" class="view-more-link">
+        View more {{ group.category.categoryName }} ({{ group.products.length - 3 }} more)
+      </a>
+    </div>
+    <ng-template #noCategoryItems>
+      <p class="no-items">No {{ group.category.categoryName.toLowerCase() }} found</p>
+    </ng-template>
+  </div>
+</ng-container>
+
+    <!-- Single Category -->
+    <ng-container *ngFor="let group of categoryGroups">
+      <div class="inventory-section" *ngIf="activeTab === getCategorySafeId(group.category)">
+        <h3>{{ group.category.categoryName }}</h3>
+        <div class="table-container">
+          <table *ngIf="getFilteredProductsForCategory(group).length > 0; else noCategoryItemsSingle">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th class="hide-mobile">Description</th>
+                <th>Quantity</th>
+                <th class="hide-mobile-sm">Price</th>
+                <th class="hide-mobile">Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of getFilteredProductsForCategory(group)">
+                <td>
+                  <i class="material-icons">{{ getCategoryIcon(group.category.categoryName) }}</i> {{ item.productName }}
+                </td>
+                <td class="hide-mobile">{{ item.productDescription }}</td>
+                <td>{{ item.quantityInStock }}</td>
+                <td class="hide-mobile-sm">${{ item.unitPrice.toFixed(2) }}</td>
+                <td class="hide-mobile" [ngClass]="{'low-stock': item.quantityInStock <= item.reorderLevel}">
+                  {{ item.quantityInStock > 0 ? (item.quantityInStock <= item.reorderLevel ? 'Low Stock' : 'In Stock') : 'Out of Stock' }}
+                </td>
+                <td>
+                  <button class="action-btn" (click)="openUpdateStockModal(item)" aria-label="Update stock">📦</button>
+                  <button class="action-btn" (click)="deleteProduct(item)" aria-label="Delete item">🗑️</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #noCategoryItemsSingle>
+          <p class="no-items">No {{ group.category.categoryName.toLowerCase() }} found</p>
+        </ng-template>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <!-- Low Stock Section -->
+  <div class="inventory-section" *ngIf="activeTab === 'low-stock' && !isLoading">
+    <h3>Low Stock Items</h3>
+    <div class="table-container">
+      <table *ngIf="filteredLowStock.length > 0; else noLowStock">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th class="hide-mobile">Category</th>
+            <th>Quantity</th>
+            <th class="hide-mobile-sm">Reorder Level</th>
+            <th class="hide-mobile">Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of filteredLowStock">
+            <td><i class="material-icons">warning</i> {{ item.productName }}</td>
+            <td class="hide-mobile">{{ item.category?.categoryName || 'Uncategorized' }}</td>
+            <td>{{ item.quantityInStock }}</td>
+            <td class="hide-mobile-sm">{{ item.reorderLevel }}</td>
+            <td class="hide-mobile">${{ item.unitPrice.toFixed(2) }}</td>
+            <td>
+              <button class="action-btn" (click)="openUpdateStockModal(item)" aria-label="Update stock">📦</button>
+              <button class="action-btn" (click)="deleteProduct(item)" aria-label="Delete item">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noLowStock>
+      <p class="no-items">No low stock items found</p>
+    </ng-template>
+  </div>
+
+  <!-- Inventory Overview Chart -->
+  <div class="chart-section" *ngIf="activeTab === 'all' && !isLoading && products.length > 0">
+    <h3>Inventory Overview</h3>
+    <div class="chart-container">
+      <canvas #inventoryChart></canvas>
+    </div>
+  </div>
+
+  <!-- Add Item Modal -->
+  <div class="modal" *ngIf="showAddItemModal">
+    <div class="modal-content">
+      <span class="close" (click)="closeAddItemModal()" aria-label="Close modal">×</span>
+      <h3>Add New Item</h3>
+      <form #itemForm="ngForm" (ngSubmit)="addItem(itemForm)">
+        <div class="form-group">
+          <label for="productName">Name</label>
+          <input type="text" id="productName" name="productName" [(ngModel)]="newItem.productName" required aria-required="true">
+        </div>
+        <div class="form-group">
+          <label for="productDescription">Description</label>
+          <textarea id="productDescription" name="productDescription" [(ngModel)]="newItem.productDescription" required aria-required="true"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="category">Category</label>
+          <div class="toggle-container">
+            <!-- <button type="button" (click)="toggleCategoryCreation()" class="toggle-btn">
+              {{ isCreatingNewCategory ? 'Select Existing' : 'Create New' }}
+            </button> -->
+          </div>
+          <ng-container *ngIf="!isCreatingNewCategory">
+            <select id="category" name="category" [(ngModel)]="newItem.category" required aria-required="true">
+              <option *ngFor="let category of categories" [ngValue]="category">{{ category.categoryName }} ({{ category.id }})</option>
+            </select>
+          </ng-container>
+          <ng-container *ngIf="isCreatingNewCategory">
+            <input type="text" id="newCategoryName" name="newCategoryName" [(ngModel)]="newCategoryName" placeholder="New Category Name" required aria-required="true">
+          </ng-container>
+        </div>
+        <div class="form-group">
+          <label for="supplier">Supplier</label>
+          <div class="toggle-container">
+            <button type="button" (click)="toggleSupplierCreation()" class="toggle-btn">
+              {{ isCreatingNewSupplier ? 'Select Existing' : 'Create New' }}
+            </button>
+          </div>
+          <ng-container *ngIf="!isCreatingNewSupplier">
+            <select id="supplier" name="supplier" [(ngModel)]="newItem.supplier" required aria-required="true">
+              <option *ngFor="let supplier of suppliers" [ngValue]="supplier">{{ supplier.supplierName }}</option>
+            </select>
+          </ng-container>
+          <ng-container *ngIf="isCreatingNewSupplier">
+            <input type="text" id="newSupplierName" name="newSupplierName" [(ngModel)]="newSupplierData.supplierName" placeholder="Supplier Name" required aria-required="true">
+            <input type="text" id="newSupplierContact" name="newSupplierContact" [(ngModel)]="newSupplierData.contactInfo" placeholder="Contact Info">
+            <input type="text" id="newSupplierAddress" name="newSupplierAddress" [(ngModel)]="newSupplierData.address" placeholder="Address">
+          </ng-container>
+        </div>
+        <div class="form-group">
+          <label for="unitPrice">Unit Price ($)</label>
+          <input type="number" id="unitPrice" name="unitPrice" [(ngModel)]="newItem.unitPrice" min="0" step="0.01" required aria-required="true">
+        </div>
+        <div class="form-group">
+          <label for="quantityInStock">Initial Stock</label>
+          <input type="number" id="quantityInStock" name="quantityInStock" [(ngModel)]="newItem.quantityInStock" min="0" required aria-required="true">
+        </div>
+        <div class="form-group">
+          <label for="reorderLevel">Reorder Level</label>
+          <input type="number" id="reorderLevel" name="reorderLevel" [(ngModel)]="newItem.reorderLevel" min="0" required aria-required="true">
+        </div>
+        <button type="submit" class="add-btn" [disabled]="!itemForm.valid">Add Item</button>
+      </form>
+    </div>
+  </div>
+
+<!-- Add this to your HTML template -->
+<div class="modal" *ngIf="showUpdateStockModal">
+  <div class="modal-content">
+    <span class="close" (click)="closeUpdateStockModal()" aria-label="Close modal">×</span>
+    <h3>Update Stock for {{ selectedProduct?.productName }}</h3>
+    <form #stockForm="ngForm" (ngSubmit)="submitStockUpdate(stockForm)">
+      <div class="form-group">
+        <label for="currentStock">Current Stock</label>
+        <input type="text" id="currentStock" [value]="selectedProduct?.quantityInStock" disabled>
+      </div>
+      <div class="form-group">
+        <label for="newStock">New Stock Level</label>
+        <input type="number" id="newStock" name="newStock" [(ngModel)]="newStockValue" required min="0" aria-required="true">
+      </div>
+      <button type="submit" class="update-btn" [disabled]="!stockForm.valid">Update Stock</button>
+    </form>
+  </div>
+</div>

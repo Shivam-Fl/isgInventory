@@ -1,0 +1,8 @@
+<div class="breadcrumb-container">
+    <div class="breadcrumb" *ngIf="breadcrumbs.length > 0">
+      <a [routerLink]="'/dashboard'">Dashboard</a>
+      <span *ngFor="let breadcrumb of breadcrumbs.slice(1)">
+        &gt; <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
+      </span>
+    </div>
+  </div>

@@ -1,0 +1,331 @@
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+  transition: width 0.3s ease;
+
+  &.collapsed {
+    width: 80px;
+  }
+
+  .logo {
+    padding: 20px;
+    border-bottom: 1px solid #f1f3f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+
+    .logo-content {
+      display: flex;
+      align-items: center;
+
+      .logo-image {
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 22px;
+        color: #2c3e50;
+        font-weight: 600;
+      }
+    }
+
+    .add-btn,
+    .toggle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background-color: #f8f9fa;
+      color: #6c5ce7;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #f1f3f5;
+        transform: scale(1.1);
+      }
+    }
+
+    .toggle-btn {
+      position: absolute;
+      right: -18px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #ffffff;
+      border: 1px solid #e9ecef;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .menu-container {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .menu-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 14px 20px;
+      color: #5c6ac4;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+
+      .icon-wrapper {
+        position: relative;
+        width: 28px;
+        margin-right: 16px;
+        display: flex;
+        align-items: center;
+
+        .menu-icon {
+          font-size: 20px;
+        }
+
+        .notification-badge {
+          position: absolute;
+          top: -8px;
+          right: -8px;
+          background-color: #ff6b6b;
+          color: white;
+          font-size: 10px;
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+
+      .menu-text {
+        font-weight: 500;
+      }
+
+      &:hover {
+        background-color: #f8f9fa;
+        color: #6c5ce7;
+      }
+
+      &.active {
+        background-color: #f0f2ff;
+        color: #6c5ce7;
+        border-left: 4px solid #6c5ce7;
+
+        .menu-icon {
+          color: #6c5ce7;
+        }
+      }
+    }
+  }
+
+  .user-profile {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #f1f3f5;
+
+    .avatar {
+      position: relative;
+      margin-right: 16px;
+
+      .avatar-image {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .status-indicator {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #48dbfb;
+        border: 2px solid white;
+      }
+    }
+
+    .user-info {
+      flex: 1;
+
+      .user-name {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 16px;
+      }
+
+      .user-role {
+        font-size: 13px;
+        color: #7f8c8d;
+      }
+    }
+
+    .settings-btn {
+      background: none;
+      border: none;
+      color: #a4b0be;
+      cursor: pointer;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #6c5ce7;
+      }
+
+      i {
+        font-size: 18px;
+      }
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  // Scrollbar styling
+  .menu-container::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .menu-container::-webkit-scrollbar-track {
+    background: #f1f3f5;
+  }
+
+  .menu-container::-webkit-scrollbar-thumb {
+    background: #6c5ce7;
+    border-radius: 3px;
+  }
+
+  // Responsive design
+  @media (max-width: 1024px) {
+    width: 80px;
+
+    &.collapsed {
+      width: 80px;
+    }
+
+    .logo {
+      .logo-content {
+        h2 {
+          display: none;
+        }
+      }
+
+      .add-btn {
+        display: none;
+      }
+
+      .toggle-btn {
+        display: block;
+      }
+    }
+
+    .menu-list {
+      .menu-item {
+        .menu-text,
+        .notification-badge {
+          display: none;
+        }
+      }
+    }
+
+    .user-profile {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    border-right: none;
+    border-top: 1px solid #e9ecef;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+
+    &.collapsed,
+    &.expanded {
+      width: 100%;
+    }
+
+    .logo {
+      display: none; // Hide logo in mobile view to save space
+    }
+
+    .menu-container {
+      flex: none;
+      overflow-x: auto;
+      overflow-y: hidden;
+      width: 100%;
+    }
+
+    .menu-list {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+
+      .menu-item {
+        flex: 1;
+        flex-direction: column;
+        padding: 8px;
+        text-align: center;
+        min-width: 60px;
+
+        .icon-wrapper {
+          margin-right: 0;
+          margin-bottom: 4px;
+
+          .menu-icon {
+            font-size: 18px;
+          }
+
+          .notification-badge {
+            display: block;
+            top: -6px;
+            right: -6px;
+            width: 16px;
+            height: 16px;
+            font-size: 9px;
+          }
+        }
+
+        .menu-text {
+          display: block;
+          font-size: 12px;
+        }
+
+        &.active {
+          border-left: none;
+          border-top: 3px solid #6c5ce7;
+        }
+      }
+    }
+
+    .user-profile {
+      display: none; // Hide user profile in mobile view
+    }
+  }
+}

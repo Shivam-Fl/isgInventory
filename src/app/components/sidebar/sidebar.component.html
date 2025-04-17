@@ -1,0 +1,45 @@
+<div class="sidebar" [ngClass]="{'collapsed': isCollapsed}">
+  <div class="logo">
+    <div class="logo-content">
+      <img src="assets/logo.png" alt="RestaurantOS" class="logo-image">
+      <h2 [ngClass]="{'hidden': isCollapsed && !isMobile}">RestaurantOS</h2>
+    </div>
+    <button class="add-btn" aria-label="Add new" *ngIf="!isCollapsed && !isMobile">
+      <span>+</span>
+    </button>
+    <button class="toggle-btn" aria-label="Toggle sidebar" (click)="toggleSidebar()" *ngIf="!isMobile">
+      <i class="fas" [ngClass]="isCollapsed ? 'fa-angle-right' : 'fa-angle-left'"></i>
+    </button>
+  </div>
+
+  <nav class="menu-container">
+    <ul class="menu-list">
+      <li *ngFor="let item of menuItems" 
+          class="menu-item" 
+          [routerLink]="item.route" 
+          routerLinkActive="active">
+        <div class="icon-wrapper">
+          <fa-icon [icon]="item.icon" class="menu-icon"></fa-icon>
+          <span *ngIf="item.notification > 0" class="notification-badge" [ngClass]="{'hidden': isCollapsed && !isMobile}">
+            {{ item.notification }}
+          </span>
+        </div>
+        <span class="menu-text" [ngClass]="{'hidden': isCollapsed && !isMobile}">{{ item.name }}</span>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="user-profile" [ngClass]="{'hidden': isCollapsed || isMobile}">
+    <div class="avatar">
+      <img src="assets/avatar.jpg" alt="User Avatar" class="avatar-image">
+      <span class="status-indicator"></span>
+    </div>
+    <div class="user-info">
+      <div class="user-name">John Smith</div>
+      <div class="user-role">Restaurant Manager</div>
+    </div>
+    <button class="settings-btn" aria-label="User Settings">
+      <i class="fas fa-cog"></i>
+    </button>
+  </div>
+</div>
